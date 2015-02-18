@@ -5,7 +5,7 @@ if (!defined('BASEPATH'))
 
 /**
  * Class to build stuff to tack on at the end of the <body>.
- * 
+ *
  * @author		JLP
  * @copyright           Copyright (c) 2013-2015, James L. Parry
   *
@@ -16,15 +16,20 @@ class Caboose {
     var $CI; // handle to CodeIgniter instance
     // define the components
     var $components = array(
-         'lightbox' => array(
+        'lightbox' => array(
             'css' => 'jquery.lightbox-0.5.css',
             'js' => 'jquery.lightbox-0.5.min.js',
             'template' => 'lightbox'
         ),
-       'confirm' => array(
+        'confirm' => array(
             'css' => '',
             'js' => 'bootstrap-confirmation.js',
             'template' => 'confirm'
+        ),
+        'jrating' => array(
+            'css' => 'jRating.jquery.css',
+            'js' => 'jRating.jquery.js',
+            'template' => 'jrating'
         ),
      );
     // provide for any fields they need. this should be indexed [component][field]
@@ -41,7 +46,7 @@ class Caboose {
     }
 
     /**
-     * specify something that we need 
+     * specify something that we need
      */
     function needed($what, $field = null) {
         // ignore unrecognized components
@@ -54,7 +59,7 @@ class Caboose {
     }
 
     /**
-     * Generate style elements for any components used 
+     * Generate style elements for any components used
      */
     function styles() {
         $result = '';
@@ -75,7 +80,7 @@ class Caboose {
     }
 
     /**
-     * Generate script elements for any components used 
+     * Generate script elements for any components used
      */
     function scripts() {
         $result = '';
@@ -112,7 +117,7 @@ class Caboose {
     }
 
     /**
-     * Bind a field to a template 
+     * Bind a field to a template
      */
     function bind($field, $template) {
         $parms = array('field' => $field);
@@ -131,7 +136,7 @@ class Caboose {
 
     /**
      * Return everything that is supposed to be tacked onto the end.
-     * @return string 
+     * @return string
      */
     function trailings() {
         return $this->result;
