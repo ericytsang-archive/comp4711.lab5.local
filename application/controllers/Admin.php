@@ -20,16 +20,7 @@ class Welcome extends Application {
 
     function index()
     {
-        $this->data['pagebody'] = 'justone';    // this is the view we want shown
-
-        // randomize the shown quote
-        $choice = rand(1,$this->quotes->size());
-        $this->data = array_merge($this->data, (array) $this->quotes->get($choice));
-
-        // put parameters for the rxating widget
-        $this->data['average'] = ($this->data['vote_count'] > 0) ?
-            ($this->data['vote_total'] / $this->data['vote_count']) : 0;
-        $this->caboose->needed('jrating','hollywood');
+        $this->data['pagebody'] = 'homepage';    // this is the view we want shown
 
         $this->render();
     }
