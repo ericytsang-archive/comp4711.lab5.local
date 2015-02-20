@@ -37,6 +37,7 @@ class Admin extends Application {
     public function add()
     {
         $newQuote = $this->quotes->create();
+
         $this->present($newQuote);
     }
 
@@ -50,8 +51,19 @@ class Admin extends Application {
     {
         $this->load->helper('formfields');
 
+        // format any errors
+        $message = '';
+        if (count($this->errors) > 0)
+        {
+            foreach ($this->errors as $booboo)
+            {
+                $message .= $booboo . BR;
+            }
+        }
+        $this->data['message'] = $message;
+
         // create the form inputs
-        $this->data['fid']   = makeTextField('ID#','id',$quote->id);
+        $this->data['fid']   = makeTextField('ID#', 'id', $quote->id, "Unique quote identifier, system-assigned",10,10,true);
         $this->data['fwho']  = makeTextField('Author','who',$quote->who);
         $this->data['fmug']  = makeTextField('Picture','mug',$quote->mug);
         $this->data['fwhat'] = makeTextArea('The Quote','what',$quote->what);
@@ -64,6 +76,47 @@ class Admin extends Application {
         $this->data['title']    = 'Quote #'.$quote->id;
 
         $this->render();
+    }
+
+    public function confirm()
+    {
+        // new quote to be saved
+        $record = $this->quotes->create();
+
+        // extract submitted fields
+        $record->id = $this->input->post('id');
+        $record->who = $this->input->post('who');
+        $record->mug = $this->input->post('mug');
+        $record->what = $this->input->post('what');
+
+        // validation
+        if (empty($record->who))
+        {
+            $this->errors[] = 'You must specify an author.';
+        }
+        if (strlen($record->what) < 20)
+        {
+            $this->errors[] = 'A quotation must be at least 20 characters long.';
+        }
+
+        // redisplay if any errors & return to make sure we don't save anything
+        if (count($this->errors) > 0)
+        {
+            $this->present($record);
+            return;
+        }
+
+        // save stuff
+        if (empty($record->id))
+        {
+            $this->quotes->add($record);
+        }
+        else
+        {
+            $this->quotes->update($record);
+        }
+
+        redirect('/admin');
     }
 }
 
